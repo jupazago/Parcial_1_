@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -6,6 +7,7 @@ using namespace std;
 void llenar_datos(int *datos, int);
 bool golpear(int *datosC1, int *datosC2);
 void modificar_datos(int *datos, int numero);
+bool lanzamiento(int *datosC1, int *datosC2);
 
 
 int main()
@@ -55,9 +57,13 @@ void llenar_datos(int *datos, int numero){
 }
 
 bool golpear(int *datosC1, int *datosC2){
-
+    bool destruido = false;
     modificar_datos(datosC1, 1);
     modificar_datos(datosC2, 2);
+
+    lanzamiento(datosC1, datosC2);
+
+    return destruido;
 }
 
 void modificar_datos(int *datos, int numero){
@@ -97,6 +103,32 @@ void modificar_datos(int *datos, int numero){
     }
 
 }
+
+bool lanzamiento(int *datosC1, int *datosC2){
+    //calcularemos el alcance maximo del proyectil del primer canion ofensivi
+    //si se aproxima al canion defensivo efectuara su defensa, si no
+    // se avisara que el lanzamiento no fue eficiente
+
+    //Calculamos la distancia del lanzamiento
+    float distancia_maxima;
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
 
 
 
