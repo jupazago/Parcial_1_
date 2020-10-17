@@ -5,94 +5,53 @@
 
 using namespace std;
 
-//Estructuran Publica
-struct Canion{
-    int altura;
-    int cord_x;
-    int angulo=0;
-};
 
-map<string,Canion> cargar_datos(map<string,Canion> contenedor);
+void llenar_datos(int *datos, int);
+
 
 int main()
 {
+    //altura, eje x. angulo, vel inicial
+    int datosC1[4];
+    int datosC2[4];
 
-    //Vamos a agregar los datos de entrada de ambos caniones
-    map<string,vector<Canion>> canion; //mapa se llama canion, esta vacio.
-    canion=cargar_datos(canion); //Agregamos los datos
+    llenar_datos(&datosC1[0], 1);
+    cout <<endl<< "agregado ofensivo con exito"<<endl;
+    llenar_datos(&datosC2[0], 2);
+    cout <<endl<< "Agregado defensivo con exito"<<endl;
 
-    while(true){
-        //Atacaremos
-
-    }
 
     return 0;
 }
 
-
-
-map<string,Canion> cargar_datos(map<string,Canion> contenedor){
-    Canion canion;
-
-    //Datos de caniones
-    bool datos[3]={false,false};
-    int altura=0, corx=0;
-
-    cout << "Canion ofensivo DO"<<endl;
-    while(datos[0]==false){
-        cout<<endl<<"Agregar la altura: ";
-        cin >>altura;
-        if(altura>=0 && altura<100){
-            canion.altura = altura;
-            datos[0]=true;
-            canion.cord_x = 0;
-
-            contenedor["DO"].push_back(canion);
-            cout << "Creacion de segundo canion, defensivo exitoso"<<endl<<endl;
-        }else {
-            cout<<"Agrega un valor de altura entre 0m y 99m";
-        }
-    }
-
-    cout << "Canion defensivo DD"<<endl;
-    altura=0, corx=0;
-
-    while(datos[0]==false){
-        cout<<endl<<"Agregar la altura: ";
-        cin >>altura;
-        if(altura>=0 && altura<100){
-            canion.altura = altura;
-            datos[0]=true;
-
-            cout<<endl<<"Agregar cordenada en X: ";
-            cin >>corx;
-
-            if(corx >=0 && corx<100){
-                canion.cord_x = corx;
-                canion.angulo += 90;
-                datos[1]=true;
-                contenedor["DD"].push_back(canion);
-                cout << "Creacion de primer canion, ofensivo exitoso"<<endl<<endl;
-            }else {
-                cout<<"Agrega una cordenada entre 0m y 99m";
+void llenar_datos(int *datos, int numero){
+    int altura, ejex;
+    cout << "Agregar los datos del canion"<<endl<<endl;
+    cout << "altura: ";
+    cin >> altura;
+    if(altura>0 && altura<99){
+        datos[0]=altura;
+        if(numero==1){
+            datos[1] = 0;
+            datos[2] = 0;
+            datos[3] = 0;
+        }else{
+            cout << "distancia del origen en eje X: ";
+            cin >> ejex;
+            if(ejex>1 && ejex<100){
+                datos[1] = ejex;
+                datos[2] = 0;
+                datos[3] = 0;
+            }else{
+                cout << "distancia del origen en eje X erronea"<<endl;
             }
-        }else {
-            cout<<"Agrega un valor de altura entre 0m y 99m";
         }
     }
-
-
-
-
-/*
-    canion.altura=0;
-    canion.cord_x=0;
-    contenedor["DO"].push_back(canion);
-
-    canion.altura=0;
-    canion.cord_x=0;
-    contenedor["DD"].push_back(canion);
-*/
-
-    return contenedor;
 }
+
+
+
+
+
+
+
