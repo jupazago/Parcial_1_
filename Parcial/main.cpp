@@ -2,9 +2,9 @@
 #include <math.h>
 
 using namespace std;
+#define PI 3.14159265
 
-
-void llenar_datos(float *datos, float);
+void llenar_datos(float *datos, float numero);
 bool golpear(float *datosC1, float *datosC2);
 void modificar_datos(float *datos, float numero);
 bool lanzamiento(float *datosC1, float *datosC2);
@@ -19,8 +19,8 @@ int main()
     llenar_datos(&datosC1[0], 1);
     cout <<endl<< "agregado ofensivo con exito"<<endl;
 
-    //llenar_datos(datosC2, 2);
-    //cout <<endl<< "Agregado defensivo con exito"<<endl;
+    llenar_datos(datosC2, 2);
+    cout <<endl<< "Agregado defensivo con exito"<<endl;
 
     bool derribado=false;
 
@@ -36,16 +36,16 @@ void llenar_datos(float *datos, float numero){
     cout << "Agregar los datos del canion"<<endl<<endl;
     cout << "altura: ";
     cin >> altura;
-    if(altura>0 && altura<99){
+    if(altura>=0 && altura<99){
         datos[0]=altura;
         if(numero==1){
             datos[1] = 0;
             datos[2] = 0;
             datos[3] = 0;
-        }else{
+        }else if(numero==2){
             cout << "distancia del origen en eje X: ";
             cin >> ejex;
-            if(ejex>1 && ejex<100){
+            if(ejex>=0 && ejex<100){
                 datos[1] = ejex;
                 datos[2] = 0;
                 datos[3] = 0;
@@ -58,10 +58,18 @@ void llenar_datos(float *datos, float numero){
 
 bool golpear(float *datosC1, float *datosC2){
     bool destruido = false;
-    modificar_datos(datosC1, 1);
-    //modificar_datos(datosC2, 2);
 
-    lanzamiento(datosC1, datosC2);
+    //modificar_datos(datosC2, 2);
+    cout << "Vamos a generar 3 disparos"<<endl<<endl;
+    for(int i=0; i<3; i++){
+        modificar_datos(datosC1, 1);
+        destruido = lanzamiento(datosC1, datosC2);
+        if(destruido==true){
+            cout << "se procede a prevenir el impacto con la defensa"<<endl<<endl;
+            break;
+        }
+    }
+
 
     return destruido;
 }
@@ -120,14 +128,13 @@ bool lanzamiento(float *datosC1, float *datosC2){
     float v0= datosC1[3];
     float angulo=datosC1[2];
 
-    float altura_maxima = ((v0*v0)*sin(angulo*angulo)) / (2*9.81);
-    //altura total
-    altura_maxima -= datosC1[0];
-    altura_maxima += altura_maxima*2;
+    float altura_maxima = (v0*v0*sin((angulo*angulo)*PI/180))/(2*9.81);
+
+    altura_maxima += datosC1[0];
 
     //tiempo el alcanzar dicha altura
 
-    float velocidad_ascenso = datosC1[3]*sin(datosC1[2]);
+    float velocidad_ascenso = datosC1[3]*sin((datosC1[2])*PI/180);
 
     float tiempo_ascenso = velocidad_ascenso/9.8;
 
@@ -136,14 +143,26 @@ bool lanzamiento(float *datosC1, float *datosC2){
     float velocidad_descenso = sqrt(pow(velocidad_ascenso,2)+2*9.8*datosC1[0]);
 
     float tiempo_descenso = velocidad_descenso/9.8;
+    float tiempo_de_vuelo = tiempo_ascenso+tiempo_descenso;
 
-    cout << "tiempo total: "<<endl;
-    cout << tiempo_ascenso+tiempo_descenso<<endl;
-
-
+    float velocidad_x = v0*cos((angulo)*PI/180);
 
 
+    float distancia = tiempo_de_vuelo*velocidad_x;
 
+    if(distancia<(datosC2[1]+1) && distancia>(datosC2[1]-1)){
+        cout << "Impactara el proyectil"<<endl<<endl<<endl;
+        return true;
+    }else {
+        cout << "no hay necesidad de defensa"<<endl;
+    }
+
+    if(distancia<datosC2[1]){
+        cout << "Impacto antes"<<endl<<endl<<endl;
+    }else if(distancia>datosC2[1]){
+        cout << "Impacto mas lejos"<<endl<<endl<<endl;
+    }
+    return false;
 }
 
 
