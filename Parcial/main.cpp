@@ -16,11 +16,13 @@ int main()
     float datosC1[4];
     float datosC2[4];
 
+    cout << "Vamos a inicializar datos del canion ofensivo:"<<endl;
     llenar_datos(&datosC1[0], 1);
-    cout <<endl<< "agregado ofensivo con exito"<<endl;
+    cout <<endl<< "agregado canion ofensivo con exito"<<endl;
 
+    cout << "Vamos a inicializar datos del canion defensivo:"<<endl;
     llenar_datos(datosC2, 2);
-    cout <<endl<< "Agregado defensivo con exito"<<endl;
+    cout <<endl<< "Agregado canion defensivo con exito"<<endl;
 
     bool derribado=false;
 
@@ -43,7 +45,7 @@ void llenar_datos(float *datos, float numero){
             datos[2] = 0;
             datos[3] = 0;
         }else if(numero==2){
-            cout << "distancia del origen en eje X: ";
+            cout << "distancia del origen en eje X, distancia entre ambos caniones: ";
             cin >> ejex;
             if(ejex>=0 && ejex<100){
                 datos[1] = ejex;
@@ -130,7 +132,8 @@ bool lanzamiento(float *datosC1, float *datosC2){
 
     float altura_maxima = (v0*v0*sin((angulo*angulo)*PI/180))/(2*9.81);
 
-    altura_maxima += datosC1[0];
+    //encontramos la altura exacta que debe descender el objeto para impactar
+    altura_maxima += (datosC1[0]-datosC2[0]);
 
     //tiempo el alcanzar dicha altura
 
@@ -150,17 +153,23 @@ bool lanzamiento(float *datosC1, float *datosC2){
 
     float distancia = tiempo_de_vuelo*velocidad_x;
 
-    if(distancia<(datosC2[1]+1) && distancia>(datosC2[1]-1)){
-        cout << "Impactara el proyectil"<<endl<<endl<<endl;
+    //cerificamos si la explocion alcanza o impactara con el canion defensivo
+    if(distancia<(datosC2[1]+0.05*distancia) && distancia>(datosC2[1]-0.05*distancia)){
+        cout << "Impactara el proyectil, se procede a la defensa"<<endl<<endl<<endl;
+        cout << "--- Datos --- "<<endl;
+        cout << "Distancia maxima del proyectil: " << distancia;
+        cout << "Tiempo en detonar: " << tiempo_de_vuelo <<endl;
         return true;
     }else {
         cout << "no hay necesidad de defensa"<<endl;
-    }
-
-    if(distancia<datosC2[1]){
-        cout << "Impacto antes"<<endl<<endl<<endl;
-    }else if(distancia>datosC2[1]){
-        cout << "Impacto mas lejos"<<endl<<endl<<endl;
+        cout << "--- Datos --- "<<endl;
+        cout << "Distancia maxima del proyectil: " << distancia<< " metros ";
+        cout << " Tiempo: " << tiempo_de_vuelo <<" segundos"<<endl;
+        if(distancia<datosC2[1]){
+            cout << "Impacto antes"<<endl<<endl<<endl;
+        }else if(distancia>datosC2[1]){
+            cout << "Impacto mas lejos"<<endl<<endl<<endl;
+        }
     }
     return false;
 }
