@@ -8,6 +8,8 @@ void llenar_datos(float *datos, float numero);
 bool golpear(float *datosC1, float *datosC2);
 void modificar_datos(float *datos, float numero);
 bool lanzamiento(float *datosC1, float *datosC2);
+void defensa(float *datosC1, float *datosC2);
+bool choque(float *datosC1, float *datosC2);
 
 
 int main()
@@ -71,7 +73,7 @@ bool golpear(float *datosC1, float *datosC2){
             break;
         }
     }
-
+    defensa(datosC1, datosC2);
 
     return destruido;
 }
@@ -155,10 +157,16 @@ bool lanzamiento(float *datosC1, float *datosC2){
 
     //cerificamos si la explocion alcanza o impactara con el canion defensivo
     if(distancia<(datosC2[1]+0.05*distancia) && distancia>(datosC2[1]-0.05*distancia)){
-        cout << "Impactara el proyectil, se procede a la defensa"<<endl<<endl<<endl;
+        if(tiempo_de_vuelo>2){
+            cout << "Impactara el proyectil, se procede a la defensa"<<endl<<endl<<endl;
+
+        }else{
+            cout << "el tiempo es menor de 2 segundos, no hay tiempo suficiente para defender"<<endl<<endl<<endl;
+        }
         cout << "--- Datos --- "<<endl;
         cout << "Distancia maxima del proyectil: " << distancia;
         cout << "Tiempo en detonar: " << tiempo_de_vuelo <<endl;
+        cout << "Radio del proyectil: " << (datosC2[1]+0.05*distancia)<< " metros " <<endl;
         return true;
     }else {
         cout << "no hay necesidad de defensa"<<endl;
@@ -176,10 +184,50 @@ bool lanzamiento(float *datosC1, float *datosC2){
 
 
 
+void  defensa(float *datosC1, float *datosC2){
+    //[0] altura
+    //[1] eje x
+    //[2] angulo
+    //[3] vel inicial
+    //Calculamos el impacto
+
+    //capturamos la posicion del misil despues de 2 segundos para reaccionar
+    //asi tal cual lo plantea el ejercicio
+
+    float t = 2; //tiempo para reaccionar
+
+    //CAPTURAMOS las cordenadas de X, Y del proyecil.
+    float posicion_misil_Y = (datosC1[3]*sin((datosC1[2])*PI/180)*t-(9.8*pow(2,2))/2)+datosC1[0];
+    float posicion_misil_X = datosC1[3]*cos((datosC1[2])*PI/180)*t;
+
+    float posicion_canion_X= datosC2[1];
+    float posicion_canion_Y= datosC2[0];
+
+    //calculamos la pendinete entre el misil y el canion defensivo
+    // M = y2-y1 / x2-x1
+
+    //Pendiente
+
+    float m = (posicion_canion_Y - posicion_misil_Y)/(posicion_canion_X - posicion_misil_X);
+
+    //Angulo de tiro predilecto
+
+    float angulo = atan(m)*180/PI;
+    datosC2[2] = angulo;
+
+    bool a_salvo = choque(datosC1,datosC2);
+
+}
 
 
+bool choque(float *datosC1, float *datosC2){
+    //[0] altura
+    //[1] eje x
+    //[2] angulo
+    //[3] vel inicial
+    //Calculamos el impacto
 
-
+}
 
 
 
