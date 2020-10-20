@@ -257,25 +257,24 @@ bool choque(float *datosC1, float *datosC2){
 
     int contador=1;
     //////////////////////////
-    for(int i= -10; i<11; i= i+10){
+    for(float i= 0; i<=30; i+=15){
         //comprobamos si impacta en algum momento
         while (tiempo<tiempo_de_vuelo) {
 
             float posicion_misilOfe_Y = (datosC1[3]*sin((datosC1[2])*PI/180)*tiempo-(9.8*pow(tiempo,2))/2)+datosC1[0];
             float posicion_misilOfe_X = datosC1[3]*cos((datosC1[2])*PI/180)*tiempo;
 
-            float posicion_misilDefe_Y = (datosC2[3]*sin((datosC2[2]+i)*PI/180)*(tiempo-2)-(9.8*pow((tiempo-2),2))/2)+datosC2[0];
-            float posicion_misilDefe_X = datosC2[3]*cos((datosC2[2]+i)*PI/180)*(tiempo-2);
-            if(tiempo==2){
+            float posicion_misilDefe_Y = (datosC2[3]*sin((-(datosC2[2]-i))*PI/180)*(tiempo-2)-(9.8*pow((tiempo-2),2))/2)+datosC2[0];
+            float posicion_misilDefe_X = -datosC2[3]*cos((datosC2[2]-i)*PI/180)*(tiempo-2)+posicion_misilDefe_X;
+            if(tiempo==2.0){
                 posicion_misilDefe_X = datosC2[1];
             }
-
             //distancia
             d = sqrt(pow((posicion_misilDefe_Y - posicion_misilOfe_Y),2)+pow((posicion_misilDefe_X - posicion_misilOfe_X),2));
 
+            cout<<d<<endl;
 
-
-            cout <<"Distancia entre misiles: "<< d<<endl;
+            //cout <<"X "<< posicion_misilDefe_X<<endl;
             if(d< (0.05*distacia) && d> -(0.05*distacia)){
                 break;
             }
@@ -290,9 +289,10 @@ bool choque(float *datosC1, float *datosC2){
             return true;
         }else{
             cout << "Fallamos el intento "<<contador<<endl;
+            tiempo=2;
             contador++;
         }
-
+        cout<<endl<<"----"<<endl;
     }
     return false;
 }
