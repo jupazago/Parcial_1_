@@ -165,8 +165,8 @@ bool lanzamiento(float *datosC1, float *datosC2){
         }
         cout << "--- Datos --- "<<endl;
         cout << "Distancia maxima del proyectil: " << distancia;
-        cout << "Tiempo en detonar: " << tiempo_de_vuelo <<endl;
-        cout << "Radio del proyectil: " << (datosC2[1]+0.05*distancia)<< " metros " <<endl;
+        cout << " Tiempo en hasta el impacto: " << tiempo_de_vuelo <<endl;
+        cout << " Radio del proyectil: " << (datosC2[1]+0.05*distancia)<< " metros " <<endl;
         return true;
     }else {
         cout << "no hay necesidad de defensa"<<endl;
@@ -225,8 +225,76 @@ bool choque(float *datosC1, float *datosC2){
     //[1] eje x
     //[2] angulo
     //[3] vel inicial
-    //Calculamos el impacto
+    datosC2[3] = 30;
+    float distacia = datosC2[1]; //distancia entre torres
+    float d=0;
 
+    //generamos 3 misiles defensivos
+    float tiempo = 2;
+    ///////////////////////////////////
+    //tiempo donde impactaria
+
+    float v0= datosC1[3];
+    float angulo=datosC1[2];
+
+    float altura_maxima = (v0*v0*sin((angulo*angulo)*PI/180))/(2*9.81);
+
+    //encontramos la altura exacta que debe descender el objeto para impactar
+    altura_maxima += (datosC1[0]-datosC2[0]);
+
+    //tiempo el alcanzar dicha altura
+
+    float velocidad_ascenso = datosC1[3]*sin((datosC1[2])*PI/180);
+
+    float tiempo_ascenso = velocidad_ascenso/9.8;
+
+    //vel final descenso
+
+    float velocidad_descenso = sqrt(pow(velocidad_ascenso,2)+2*9.8*datosC1[0]);
+
+    float tiempo_descenso = velocidad_descenso/9.8;
+    float tiempo_de_vuelo = tiempo_ascenso+tiempo_descenso;
+
+    int contador=1;
+    //////////////////////////
+    for(int i= -10; i<11; i= i+10){
+        //comprobamos si impacta en algum momento
+        while (tiempo<tiempo_de_vuelo) {
+
+            float posicion_misilOfe_Y = (datosC1[3]*sin((datosC1[2])*PI/180)*tiempo-(9.8*pow(tiempo,2))/2)+datosC1[0];
+            float posicion_misilOfe_X = datosC1[3]*cos((datosC1[2])*PI/180)*tiempo;
+
+            float posicion_misilDefe_Y = (datosC2[3]*sin((datosC2[2]+i)*PI/180)*(tiempo-2)-(9.8*pow((tiempo-2),2))/2)+datosC2[0];
+            float posicion_misilDefe_X = datosC2[3]*cos((datosC2[2]+i)*PI/180)*(tiempo-2);
+            if(tiempo==2){
+                posicion_misilDefe_X = datosC2[1];
+            }
+
+            //distancia
+            d = sqrt(pow((posicion_misilDefe_Y - posicion_misilOfe_Y),2)+pow((posicion_misilDefe_X - posicion_misilOfe_X),2));
+
+
+
+            cout <<"Distancia entre misiles: "<< d<<endl;
+            if(d< (0.05*distacia) && d> -(0.05*distacia)){
+                break;
+            }
+
+
+            tiempo+= 0.1;
+            cout<<endl<<endl;
+        }
+
+        if(d< (0.05*distacia) && d> -(0.05*distacia)){
+            cout << "ESTAMOS A SALVO, Se derribo el misil peligroso"<<endl<<endl;
+            return true;
+        }else{
+            cout << "Fallamos el intento "<<contador<<endl;
+            contador++;
+        }
+
+    }
+    return false;
 }
 
 
