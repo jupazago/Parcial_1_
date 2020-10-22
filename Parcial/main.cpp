@@ -15,7 +15,7 @@ bool choque(float *datosC1, float *datosC2);
 int main()
 {
     //altura, eje x. angulo, vel inicial
-    float datosC1[4];
+    float datosC1[4];//ofensivo
     float datosC2[4];
 
     cout << "Vamos a inicializar datos del canion ofensivo:"<<endl;
